@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { SetContextInterceptor } from 'src/common/interceptors';
 import { ClsService } from 'nestjs-cls';
 import { AppLoggerService } from 'src/common/helpers/logger';
+import { formatErrorText } from 'src/common/utils';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -22,6 +23,15 @@ async function bootstrap() {
   app.useGlobalInterceptors(
     new SetContextInterceptor(app.get(ClsService), config),
   );
+
+  process.on('unhandledRejection', (err: any) => {
+    const errorText: string = formatErrorText(appName, err);
+    logger.error(errorText, err);
+  });
+  process.on('uncaughtException', (err: any) => {
+    const errorText: string = formatErrorText(appName, err);
+    logger.error(errorText, err);
+  });
 
   await app.listen(appPort);
 
