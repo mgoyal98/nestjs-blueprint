@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { configuration } from './config';
 import { ClsModule } from 'nestjs-cls';
+import { AppLoggerModule } from 'src/common/helpers/logger';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { ClsModule } from 'nestjs-cls';
       global: true,
       middleware: { mount: true },
     }),
+    AppLoggerModule,
   ],
   controllers: [AppController],
   providers: [AppService],

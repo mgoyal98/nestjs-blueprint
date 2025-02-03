@@ -10,6 +10,7 @@ export const config = {
   logger: {
     delimitter: false,
     colorify: false,
+    debug: false,
   },
   database: {
     mongoDbUrl:

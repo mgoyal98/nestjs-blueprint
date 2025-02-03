@@ -29,8 +29,10 @@ export class SetContextInterceptor implements NestInterceptor {
       correlationId = `${appName}-${uuidv4()}`;
     }
 
-    this.cls.set(ContextKey.CORRELATION_ID, correlationId);
+    const userId = headers[HeaderKey.USER_ID];
 
+    this.cls.set(ContextKey.CORRELATION_ID, correlationId);
+    this.cls.set(ContextKey.USER_ID, userId);
     return next.handle();
   }
 }
