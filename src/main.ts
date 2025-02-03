@@ -1,7 +1,10 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
-import { SetContextInterceptor } from 'src/common/interceptors';
+import {
+  SetContextInterceptor,
+  StandardResponseInterceptor,
+} from 'src/common/interceptors';
 import { ClsService } from 'nestjs-cls';
 import { AppLoggerService } from 'src/common/helpers/logger';
 import { formatErrorText } from 'src/common/utils';
@@ -26,6 +29,7 @@ async function bootstrap() {
   app.setGlobalPrefix(appPrefix);
   app.useGlobalInterceptors(
     new SetContextInterceptor(app.get(ClsService), config),
+    new StandardResponseInterceptor(),
   );
 
   process.on('unhandledRejection', (err: any) => {
