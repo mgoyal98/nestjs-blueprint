@@ -5,11 +5,15 @@ import { SetContextInterceptor } from 'src/common/interceptors';
 import { ClsService } from 'nestjs-cls';
 import { AppLoggerService } from 'src/common/helpers/logger';
 import { formatErrorText } from 'src/common/utils';
+import helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     bufferLogs: true,
   });
+
+  app.use(helmet());
+  app.enableCors({});
 
   const config = app.get(ConfigService);
   const appPort = config.get<number>('app.port');
