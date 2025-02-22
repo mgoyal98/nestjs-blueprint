@@ -1,0 +1,55 @@
+import { Controller, Get, Param } from '@nestjs/common';
+import { ExampleService } from './example.service';
+import { AppLoggerService } from 'src/common/helpers/logger';
+import { exceptionMapper, EXCEPTION_MESSAGE } from 'src/common/exception';
+
+@Controller('example')
+export class ExampleController {
+  constructor(
+    private readonly exampleService: ExampleService,
+    private readonly logger: AppLoggerService,
+  ) {}
+
+  private logPrefix(funcName: string) {
+    return `[${this.constructor.name}.${funcName}]`;
+  }
+
+  @Get()
+  async getExample() {
+    const logPrefix = this.logPrefix(this.getExample.name);
+    try {
+      this.logger.info(`${logPrefix} Get Example Request`);
+      const result = await this.exampleService.getExample();
+      this.logger.info(`${logPrefix} Get Example Response`, {
+        result,
+      });
+      return result;
+    } catch (error) {
+      this.logger.error(`${logPrefix} Get Example Failed`, error);
+      throw error;
+    }
+  }
+
+  @Get('error/:id')
+  getError(@Param('id') id: string): string {
+    throw exceptionMapper(EXCEPTION_MESSAGE.USER_NOT_FOUND, {
+      id,
+    });
+  }
+
+  @Get('remote')
+  async getRemoteUsers() {
+    const logPrefix = this.logPrefix(this.getRemoteUsers.name);
+    try {
+      this.logger.info(`${logPrefix} Get Remote Users Request`);
+      const result = await this.exampleService.getRemoteUsers();
+      this.logger.info(`${logPrefix} Get Remote Users Response`, {
+        result,
+      });
+      return result;
+    } catch (error) {
+      this.logger.error(`${logPrefix} Get Remote Users Failed`, error);
+      throw error;
+    }
+  }
+}

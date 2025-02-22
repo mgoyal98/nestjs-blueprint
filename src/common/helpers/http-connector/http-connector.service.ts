@@ -57,7 +57,10 @@ export class HttpConnectorService {
     } catch (remoteApiFailure) {
       this.logger.error(
         `${logPrefix} Remote API Failure`,
-        { opts, data: remoteApiFailure.response?.data },
+        {
+          opts,
+          data: remoteApiFailure.response?.data,
+        },
         remoteApiFailure,
       );
       throw remoteApiFailure;
