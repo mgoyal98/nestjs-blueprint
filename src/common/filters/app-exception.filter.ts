@@ -5,11 +5,11 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { AppLoggerService } from '../helpers/logger';
+import { AppLoggerService } from 'src/common/helpers/logger';
 import { isArray, isEmpty } from 'lodash';
-import { IStandardResponseFailure } from '../interfaces';
+import { IStandardResponseFailure } from 'src/common/interfaces';
 import { ConfigService } from '@nestjs/config';
-import { HeaderKey } from '../enums';
+import { HeaderKey } from 'src/common/enums';
 @Catch()
 export class AppExceptionFilter implements ExceptionFilter {
   constructor(

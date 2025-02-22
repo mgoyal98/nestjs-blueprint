@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { IStandardResponseSuccess } from '../interfaces';
+import { IStandardResponseSuccess } from 'src/common/interfaces';
 import { Request, Response } from 'express';
 
 @Injectable()
