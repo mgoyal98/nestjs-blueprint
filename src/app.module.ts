@@ -6,6 +6,7 @@ import { configuration } from './config';
 import { ClsModule } from 'nestjs-cls';
 import { AppLoggerModule } from 'src/common/helpers/logger';
 import { HttpConnectorModule } from './common/helpers/http-connector';
+import { DatabaseModule } from './common/database';
 import { ExampleModule } from './modules/example/example.module';
 
 @Module({
@@ -20,6 +21,7 @@ import { ExampleModule } from './modules/example/example.module';
     }),
     AppLoggerModule,
     HttpConnectorModule,
+    DatabaseModule,
     ExampleModule,
   ],
   controllers: [AppController],
