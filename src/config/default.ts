@@ -19,4 +19,13 @@ export const config = {
     mongoDbUrl:
       process.env.MONGO_DB_URL || 'mongodb://localhost:27017/nestjs_blueprint',
   },
+  auth: {
+    // NOTE: This is a comma-separated list of API keys.
+    // This is for demo purposes. In a real-world scenario,
+    // you would store these in a more secure location such as
+    // an AWS Secrets Manager or a DB.
+    apiKeys: process.env.API_KEYS
+      ? process.env.API_KEYS.split(',')
+      : ['1234567890'],
+  },
 };

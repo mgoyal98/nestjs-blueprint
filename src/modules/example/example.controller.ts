@@ -1,7 +1,8 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, UseGuards } from '@nestjs/common';
 import { ExampleService } from './example.service';
 import { AppLoggerService } from 'src/common/helpers/logger';
 import { exceptionMapper, EXCEPTION_MESSAGE } from 'src/common/exception';
+import { ApiKeyGuard } from 'src/common/guards';
 
 @Controller('example')
 export class ExampleController {
@@ -51,5 +52,11 @@ export class ExampleController {
       this.logger.error(`${logPrefix} Get Remote Users Failed`, error);
       throw error;
     }
+  }
+
+  @Get('api-key')
+  @UseGuards(ApiKeyGuard)
+  getApiKey() {
+    return 'API key is valid';
   }
 }
