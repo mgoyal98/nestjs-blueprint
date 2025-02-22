@@ -9,3 +9,9 @@ export interface IStandardResponse {
 export interface IStandardResponseSuccess extends IStandardResponse {
   state: 'SUCCESS';
 }
+
+export interface IStandardResponseFailure extends IStandardResponse {
+  state: 'FAILURE';
+  statusText: any;
+  source: string;
+}

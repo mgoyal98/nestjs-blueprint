@@ -9,6 +9,7 @@ import { ClsService } from 'nestjs-cls';
 import { AppLoggerService } from 'src/common/helpers/logger';
 import { formatErrorText } from 'src/common/utils';
 import helmet from 'helmet';
+import { AppExceptionFilter } from 'src/common/filters';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -31,6 +32,7 @@ async function bootstrap() {
     new SetContextInterceptor(app.get(ClsService), config),
     new StandardResponseInterceptor(),
   );
+  app.useGlobalFilters(new AppExceptionFilter(config, logger));
 
   process.on('unhandledRejection', (err: any) => {
     const errorText: string = formatErrorText(appName, err);

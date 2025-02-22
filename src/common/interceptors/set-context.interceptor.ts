@@ -8,8 +8,7 @@ import { ClsService } from 'nestjs-cls';
 import { Observable } from 'rxjs';
 import { v4 as uuidv4 } from 'uuid';
 import { ConfigService } from '@nestjs/config';
-import { ContextKey } from 'src/common/enums';
-import { HeaderKey } from '../enums/header-key.enum';
+import { ContextKey, HeaderKey } from 'src/common/enums';
 
 @Injectable()
 export class SetContextInterceptor implements NestInterceptor {
