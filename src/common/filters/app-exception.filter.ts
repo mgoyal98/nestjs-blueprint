@@ -32,7 +32,7 @@ export class AppExceptionFilter implements ExceptionFilter {
       state: 'FAILURE',
       status: HttpStatus.INTERNAL_SERVER_ERROR,
       timestamp: Date.now(),
-      path: request.route.path,
+      path: request?.route?.path || request?.path,
       statusText:
         'Something went wrong! Please wait while we get this checked.',
       source: this.config.get('app.name'),

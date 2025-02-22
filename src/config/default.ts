@@ -7,6 +7,9 @@ export const config = {
     env: (process.env.NODE_ENV || 'development') as Env,
     prefix: process.env.APP_PREFIX || 'api',
   },
+  http: {
+    timeout: +process.env.HTTP_TIMEOUT || 30000,
+  },
   logger: {
     delimitter: false,
     colorify: false,
