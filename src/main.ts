@@ -10,6 +10,7 @@ import { AppLoggerService } from 'src/common/helpers/logger';
 import { formatErrorText } from 'src/common/utils';
 import helmet from 'helmet';
 import { AppExceptionFilter } from 'src/common/filters';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -33,6 +34,8 @@ async function bootstrap() {
     new StandardResponseInterceptor(),
   );
   app.useGlobalFilters(new AppExceptionFilter(config, logger));
+
+  app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
 
   process.on('unhandledRejection', (err: any) => {
     const errorText: string = formatErrorText(appName, err);

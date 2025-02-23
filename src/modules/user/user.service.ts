@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { AppLoggerService } from 'src/common/helpers/logger';
 import { User, UserRepository } from './db';
+import { CreateUserDto } from './user.dto';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class UserService {
@@ -26,11 +28,14 @@ export class UserService {
     }
   }
 
-  async createUser(user: User): Promise<User> {
+  async createUser(user: CreateUserDto): Promise<User> {
     const logPrefix = this.logPrefix(this.createUser.name);
     try {
       this.logger.debug(`${logPrefix} Creating user`, { user });
-      const result = await this.userRepository.create(user);
+      const result = await this.userRepository.create({
+        userId: uuidv4(),
+        ...user,
+      });
       this.logger.debug(`${logPrefix} Created user`, { result });
       return result;
     } catch (error) {
