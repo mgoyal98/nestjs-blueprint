@@ -9,3 +9,17 @@ export function formatErrorText(appName: string, err: any): string {
   }
   return errorText;
 }
+
+export const objectToDotNotation = (args: Record<string, any>) => {
+  const setObject = {};
+  Object.keys(args).forEach((key) => {
+    if (typeof args[key] === 'object' && args[key]) {
+      Object.keys(args[key]).forEach((subkey) => {
+        setObject[`${key}.${subkey}`] = args[key][subkey];
+      });
+    } else {
+      setObject[key] = args[key];
+    }
+  });
+  return setObject;
+};
