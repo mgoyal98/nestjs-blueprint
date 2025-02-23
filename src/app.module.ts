@@ -8,6 +8,7 @@ import { AppLoggerModule } from 'src/common/helpers/logger';
 import { HttpConnectorModule } from './common/helpers/http-connector';
 import { DatabaseModule } from './common/database';
 import { ExampleModule } from './modules/example/example.module';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { ExampleModule } from './modules/example/example.module';
     HttpConnectorModule,
     DatabaseModule,
     ExampleModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
