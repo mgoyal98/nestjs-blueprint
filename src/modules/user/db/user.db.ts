@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Model } from 'mongoose';
 import { DefaultSchemaOptions } from 'src/common/database';
+import { v4 as uuidv4 } from 'uuid';
 
 export type UserDocument = HydratedDocument<User>;
 
@@ -8,8 +9,13 @@ export type UserDocument = HydratedDocument<User>;
   ...DefaultSchemaOptions,
 })
 export class User {
-  @Prop({ required: true, unique: true, index: true })
-  userId: string;
+  @Prop({
+    required: true,
+    unique: true,
+    index: true,
+    default: () => uuidv4(),
+  })
+  userId?: string;
 
   @Prop({ required: true, unique: true, index: true })
   email: string;
@@ -26,7 +32,8 @@ export const UserSchema = SchemaFactory.createForClass(User);
 UserSchema.set('toJSON', {
   ...DefaultSchemaOptions.toJSON,
   transform: function (_doc, ret) {
-    delete ret['password'];
+    delete ret._id;
+    delete ret.password;
     return ret;
   },
 });

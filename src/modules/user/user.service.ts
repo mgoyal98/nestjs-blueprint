@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { AppLoggerService } from 'src/common/helpers/logger';
 import { User, UserRepository } from './db';
 import { CreateUserDto } from './user.dto';
-import { v4 as uuidv4 } from 'uuid';
 import { hashPassword } from 'src/common/utils/crypto';
+import { EXCEPTION_MESSAGE, exceptionMapper } from 'src/common/exception';
 
 @Injectable()
 export class UserService {
@@ -29,13 +29,34 @@ export class UserService {
     }
   }
 
+  async findUserByEmail(email: string, suppressError = false): Promise<User> {
+    const logPrefix = this.logPrefix(this.findUserByEmail.name);
+    try {
+      const result = await this.userRepository.findByEmail(email);
+      if (!result && !suppressError) {
+        this.logger.error(`${logPrefix} User not found`, { email });
+        throw exceptionMapper(EXCEPTION_MESSAGE.USER_NOT_FOUND);
+      }
+      this.logger.debug(`${logPrefix} Found user by email`, { result });
+      return result;
+    } catch (error) {
+      this.logger.error(`${logPrefix} Failed to find user by email`, { error });
+      throw error;
+    }
+  }
+
   async createUser(user: CreateUserDto): Promise<User> {
     const logPrefix = this.logPrefix(this.createUser.name);
     try {
       this.logger.debug(`${logPrefix} Creating user`, { user });
+
+      const existingUser = await this.findUserByEmail(user.email, true);
+      if (existingUser) {
+        this.logger.error(`${logPrefix} User already exists`);
+        throw exceptionMapper(EXCEPTION_MESSAGE.USER_ALREADY_EXISTS);
+      }
       user.password = await hashPassword(user.password);
       const result = await this.userRepository.create({
-        userId: uuidv4(),
         ...user,
       });
       this.logger.debug(`${logPrefix} Created user`, { result });

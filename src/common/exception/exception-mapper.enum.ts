@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   InternalServerErrorException,
   NotFoundException,
   UnauthorizedException,
@@ -10,6 +11,7 @@ export enum EXCEPTION_MESSAGE {
   INTERNAL_SERVER_ERROR = 'INTERNAL_SERVER_ERROR',
   API_KEY_REQUIRED = 'API_KEY_REQUIRED',
   INVALID_API_KEY = 'INVALID_API_KEY',
+  USER_ALREADY_EXISTS = 'USER_ALREADY_EXISTS',
 }
 
 export const EXCEPTION_MAP: IExceptionMap = {
@@ -47,5 +49,13 @@ export const EXCEPTION_MAP: IExceptionMap = {
       errorCode: EXCEPTION_MESSAGE.INVALID_API_KEY,
     },
     xAppException: 'Invalid API key',
+  },
+  [EXCEPTION_MESSAGE.USER_ALREADY_EXISTS]: {
+    exception: BadRequestException,
+    data: {
+      message: 'User with email id already exists',
+      errorCode: EXCEPTION_MESSAGE.USER_ALREADY_EXISTS,
+    },
+    xAppException: 'User with email id already exists',
   },
 };

@@ -9,6 +9,7 @@ import { HttpConnectorModule } from './common/helpers/http-connector';
 import { DatabaseModule } from './common/database';
 import { ExampleModule } from './modules/example/example.module';
 import { UserModule } from './modules/user/user.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { UserModule } from './modules/user/user.module';
     DatabaseModule,
     ExampleModule,
     UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
