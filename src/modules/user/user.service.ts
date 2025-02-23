@@ -3,6 +3,7 @@ import { AppLoggerService } from 'src/common/helpers/logger';
 import { User, UserRepository } from './db';
 import { CreateUserDto } from './user.dto';
 import { v4 as uuidv4 } from 'uuid';
+import { hashPassword } from 'src/common/utils/crypto';
 
 @Injectable()
 export class UserService {
@@ -32,6 +33,7 @@ export class UserService {
     const logPrefix = this.logPrefix(this.createUser.name);
     try {
       this.logger.debug(`${logPrefix} Creating user`, { user });
+      user.password = await hashPassword(user.password);
       const result = await this.userRepository.create({
         userId: uuidv4(),
         ...user,
