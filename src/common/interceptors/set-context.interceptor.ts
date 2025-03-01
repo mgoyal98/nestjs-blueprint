@@ -31,7 +31,9 @@ export class SetContextInterceptor implements NestInterceptor {
     const userId = headers[HeaderKey.USER_ID];
 
     this.cls.set(ContextKey.CORRELATION_ID, correlationId);
-    this.cls.set(ContextKey.USER_ID, userId);
+    if (userId) {
+      this.cls.set(ContextKey.USER_ID, userId);
+    }
     return next.handle();
   }
 }

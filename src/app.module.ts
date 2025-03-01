@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configuration } from './config';
 import { ClsModule } from 'nestjs-cls';
 import { AppLoggerModule } from 'src/common/helpers/logger';
@@ -10,6 +10,7 @@ import { DatabaseModule } from './common/database';
 import { ExampleModule } from './modules/example/example.module';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -20,6 +21,14 @@ import { AuthModule } from './modules/auth/auth.module';
     ClsModule.forRoot({
       global: true,
       middleware: { mount: true },
+    }),
+    JwtModule.registerAsync({
+      useFactory: async (configService: ConfigService) => ({
+        secret: configService.get('auth.jwt.secret'),
+        signOptions: { expiresIn: configService.get('auth.jwt.expiresIn') },
+      }),
+      inject: [ConfigService],
+      global: true,
     }),
     AppLoggerModule,
     HttpConnectorModule,

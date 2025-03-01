@@ -29,6 +29,22 @@ export class UserService {
     }
   }
 
+  async findUserById(userId: string, suppressError = false): Promise<User> {
+    const logPrefix = this.logPrefix(this.findUserById.name);
+    try {
+      const result = await this.userRepository.findById(userId);
+      if (!result && !suppressError) {
+        this.logger.error(`${logPrefix} User not found`, { userId });
+        throw exceptionMapper(EXCEPTION_MESSAGE.USER_NOT_FOUND);
+      }
+      this.logger.debug(`${logPrefix} Found user by id`, { result });
+      return result;
+    } catch (error) {
+      this.logger.error(`${logPrefix} Failed to find user by id`, { error });
+      throw error;
+    }
+  }
+
   async findUserByEmail(email: string, suppressError = false): Promise<User> {
     const logPrefix = this.logPrefix(this.findUserByEmail.name);
     try {
