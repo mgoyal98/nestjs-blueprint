@@ -33,7 +33,7 @@ export class ExampleController {
 
   @Get('error/:id')
   getError(@Param('id') id: string): string {
-    throw exceptionMapper(EXCEPTION_MESSAGE.USER_NOT_FOUND, {
+    throw exceptionMapper(EXCEPTION_MESSAGE.USER_NOT_FOUND_WITH_ID, {
       id,
     });
   }

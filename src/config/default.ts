@@ -27,5 +27,12 @@ export const config = {
     apiKeys: process.env.API_KEYS
       ? process.env.API_KEYS.split(',')
       : ['1234567890'],
+    jwt: {
+      // This is for demo purposes. In a real-world scenario,
+      // you would store these in a more secure location such as
+      // an AWS Secrets Manager or a DB.
+      secret: process.env.JWT_SECRET || 'secret',
+      expiresIn: process.env.JWT_EXPIRES_IN || '1h',
+    },
   },
 };

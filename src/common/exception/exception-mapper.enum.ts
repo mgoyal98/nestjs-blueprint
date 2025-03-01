@@ -8,19 +8,29 @@ import { IExceptionMap } from './exception-mapper.interface';
 
 export enum EXCEPTION_MESSAGE {
   USER_NOT_FOUND = 'USER_NOT_FOUND',
+  USER_NOT_FOUND_WITH_ID = 'USER_NOT_FOUND_WITH_ID',
   INTERNAL_SERVER_ERROR = 'INTERNAL_SERVER_ERROR',
   API_KEY_REQUIRED = 'API_KEY_REQUIRED',
   INVALID_API_KEY = 'INVALID_API_KEY',
   USER_ALREADY_EXISTS = 'USER_ALREADY_EXISTS',
+  INVALID_CREDENTIALS = 'INVALID_CREDENTIALS',
 }
 
 export const EXCEPTION_MAP: IExceptionMap = {
   [EXCEPTION_MESSAGE.USER_NOT_FOUND]: {
     exception: NotFoundException,
     data: {
+      message: 'User Not Found. Please check your details and try again.',
+      errorCode: EXCEPTION_MESSAGE.USER_NOT_FOUND,
+    },
+    xAppException: 'User Not Found. Please check your details and try again.',
+  },
+  [EXCEPTION_MESSAGE.USER_NOT_FOUND_WITH_ID]: {
+    exception: NotFoundException,
+    data: {
       message:
         'User with {{id}} Not Found. Please check your details and try again.',
-      errorCode: EXCEPTION_MESSAGE.USER_NOT_FOUND,
+      errorCode: EXCEPTION_MESSAGE.USER_NOT_FOUND_WITH_ID,
     },
     xAppException:
       'User with {{id}} Not Found. Please check your details and try again.',
@@ -57,5 +67,13 @@ export const EXCEPTION_MAP: IExceptionMap = {
       errorCode: EXCEPTION_MESSAGE.USER_ALREADY_EXISTS,
     },
     xAppException: 'User with email id already exists',
+  },
+  [EXCEPTION_MESSAGE.INVALID_CREDENTIALS]: {
+    exception: UnauthorizedException,
+    data: {
+      message: 'Invalid credentials',
+      errorCode: EXCEPTION_MESSAGE.INVALID_CREDENTIALS,
+    },
+    xAppException: 'Invalid credentials',
   },
 };
