@@ -14,6 +14,7 @@ export enum EXCEPTION_MESSAGE {
   INVALID_API_KEY = 'INVALID_API_KEY',
   USER_ALREADY_EXISTS = 'USER_ALREADY_EXISTS',
   INVALID_CREDENTIALS = 'INVALID_CREDENTIALS',
+  INVALID_REFRESH_TOKEN = 'INVALID_REFRESH_TOKEN',
 }
 
 export const EXCEPTION_MAP: IExceptionMap = {
@@ -75,5 +76,13 @@ export const EXCEPTION_MAP: IExceptionMap = {
       errorCode: EXCEPTION_MESSAGE.INVALID_CREDENTIALS,
     },
     xAppException: 'Invalid credentials',
+  },
+  [EXCEPTION_MESSAGE.INVALID_REFRESH_TOKEN]: {
+    exception: UnauthorizedException,
+    data: {
+      message: 'Invalid refresh token',
+      errorCode: EXCEPTION_MESSAGE.INVALID_REFRESH_TOKEN,
+    },
+    xAppException: 'Invalid refresh token',
   },
 };

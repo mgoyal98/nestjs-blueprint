@@ -3,4 +3,6 @@ export enum HeaderKey {
   USER_ID = 'x-user-id',
   APP_EXCEPTION = 'x-app-exception',
   API_KEY = 'x-api-key',
+  ACCESS_TOKEN = 'x-access-token',
+  REFRESH_TOKEN = 'x-refresh-token',
 }

@@ -1,8 +1,9 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Req } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto } from 'src/modules/user';
 import { AppLoggerService } from 'src/common/helpers/logger';
 import { LoginDto } from './auth.dto';
+import { HeaderKey } from 'src/common/enums';
 
 @Controller('auth')
 export class AuthController {
@@ -30,6 +31,17 @@ export class AuthController {
     this.logger.info(`${logPrefix} Login Request`);
     const result = await this.authService.login(user);
     this.logger.info(`${logPrefix} Login Response`);
+    return result;
+  }
+
+  @Post('refresh-token')
+  async refreshToken(@Req() req: Request) {
+    const logPrefix = this.logPrefix(this.refreshToken.name);
+    this.logger.info(`${logPrefix} Refresh Token Request`);
+    const result = await this.authService.refreshToken(
+      req.headers[HeaderKey.REFRESH_TOKEN],
+    );
+    this.logger.info(`${logPrefix} Refresh Token Response`);
     return result;
   }
 }
