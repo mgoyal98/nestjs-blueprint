@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { IStandardResponseSuccess } from 'src/common/interfaces';
+import { IStandardResponse } from 'src/common/interfaces';
 import { Request, Response } from 'express';
 
 @Injectable()
@@ -21,27 +21,27 @@ export class StandardResponseInterceptor implements NestInterceptor {
 function mapStandardResponse(
   data: any,
   context: ExecutionContext,
-): IStandardResponseSuccess {
+): IStandardResponse {
   const request = context.switchToHttp().getRequest<Request>();
   const response = context.switchToHttp().getResponse<Response>();
+  const statusCode = response.statusCode;
 
-  let setHeaders: Record<string, string | number | readonly string[]> = {};
-
-  const responseData = data?.setHeaders ? data?.data : data;
-
-  if (data?.setHeaders) {
-    setHeaders = data.setHeaders;
-    delete data.setHeaders;
-  }
+  const setHeaders = data?.headers ?? {};
+  const responseData = data?.data ?? data;
+  const pagination = data?.pagination ?? undefined;
+  const message = data?.message ?? 'Success';
 
   for (const key in setHeaders) {
     response.setHeader(key, setHeaders[key]);
   }
 
   return {
-    state: 'SUCCESS',
-    status: 200,
+    success: true,
+    status: statusCode,
+    message: message,
     data: responseData,
+    pagination: pagination,
+    error: null,
     timestamp: Date.now(),
     path: request.path,
   };

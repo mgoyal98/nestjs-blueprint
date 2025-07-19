@@ -50,7 +50,7 @@ export class AuthService {
 
       return {
         data: result,
-        setHeaders: tokenHeaders,
+        headers: tokenHeaders,
       };
     } catch (error) {
       this.logger.error(`${logPrefix} Login Error`, error);
@@ -88,7 +88,7 @@ export class AuthService {
 
       return {
         data: {},
-        setHeaders: tokenHeaders,
+        headers: tokenHeaders,
       };
     } catch (error) {
       this.logger.error(`${logPrefix} Refresh Token Error`, error);

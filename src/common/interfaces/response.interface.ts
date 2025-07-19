@@ -1,17 +1,23 @@
+export interface IPagination {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+}
+
+export interface IError {
+  code?: string;
+  details?: any;
+}
+
 export interface IStandardResponse {
+  success: boolean;
   status: number;
-  state: 'SUCCESS' | 'FAILURE';
+  message: string;
   data: any;
+  pagination?: IPagination | undefined;
+  error: IError | null;
+  source?: string | undefined;
   timestamp: number;
   path: string;
-}
-
-export interface IStandardResponseSuccess extends IStandardResponse {
-  state: 'SUCCESS';
-}
-
-export interface IStandardResponseFailure extends IStandardResponse {
-  state: 'FAILURE';
-  statusText: any;
-  source: string;
 }

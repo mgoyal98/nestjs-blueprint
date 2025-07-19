@@ -7,7 +7,7 @@ import {
 import { Request, Response } from 'express';
 import { AppLoggerService } from 'src/common/helpers/logger';
 import { isArray, isEmpty } from 'lodash';
-import { IStandardResponseFailure } from 'src/common/interfaces';
+import { IStandardResponse } from 'src/common/interfaces';
 import { ConfigService } from '@nestjs/config';
 import { HeaderKey } from 'src/common/enums';
 @Catch()
@@ -28,15 +28,18 @@ export class AppExceptionFilter implements ExceptionFilter {
       exception,
     );
 
-    const errorResponse: IStandardResponseFailure = {
-      state: 'FAILURE',
+    const errorResponse: IStandardResponse = {
+      success: false,
       status: HttpStatus.INTERNAL_SERVER_ERROR,
+      message: 'Something went wrong! Please wait while we get this checked.',
+      error: {
+        code: 'INTERNAL_SERVER_EXCEPTION',
+        details: { message: 'Looks like an unhandled error.' },
+      },
+      data: null,
+      source: this.config.get('app.name'),
       timestamp: Date.now(),
       path: request?.route?.path || request?.path,
-      statusText:
-        'Something went wrong! Please wait while we get this checked.',
-      source: this.config.get('app.name'),
-      data: { message: 'Looks like an unhandled error.' },
     };
 
     if (exception.response) {
@@ -49,13 +52,18 @@ export class AppExceptionFilter implements ExceptionFilter {
         errorResponse.source,
       );
       errorResponse.path = this.getPath(exception.response, errorResponse.path);
-      errorResponse.data = this.getData(exception.response, errorResponse.data);
-      errorResponse.statusText = this.getStatusText(
+      errorResponse.error.details = this.getData(
         exception.response,
-        exception.response?.message,
-        errorResponse.statusText,
         errorResponse.data,
       );
+      errorResponse.message = this.getMessage(
+        exception.response,
+        exception.response?.message,
+        errorResponse.message,
+        errorResponse.error.details,
+      );
+      errorResponse.error.code = this.getErrorCode(exception.response);
+      delete exception.response.data?.errorCode;
     }
 
     if (exception?.response?.xAppException) {
@@ -86,7 +94,14 @@ export class AppExceptionFilter implements ExceptionFilter {
     return status;
   }
 
-  private getStatusText(
+  private getErrorCode(response: any) {
+    if (response?.data?.errorCode) {
+      return response?.data?.errorCode;
+    }
+    return 'INTERNAL_SERVER_EXCEPTION';
+  }
+
+  private getMessage(
     response: any,
     responseData: any,
     statusText: string,
