@@ -19,9 +19,9 @@ export class ExampleController {
   async getExample() {
     const logPrefix = this.logPrefix(this.getExample.name);
     try {
-      this.logger.info(`${logPrefix} Get Example Request`);
+      this.logger.debug(`${logPrefix} Get Example Request`);
       const result = await this.exampleService.getExample();
-      this.logger.info(`${logPrefix} Get Example Response`, {
+      this.logger.debug(`${logPrefix} Get Example Response`, {
         result,
       });
       return result;
@@ -42,9 +42,9 @@ export class ExampleController {
   async getRemoteUsers() {
     const logPrefix = this.logPrefix(this.getRemoteUsers.name);
     try {
-      this.logger.info(`${logPrefix} Get Remote Users Request`);
+      this.logger.debug(`${logPrefix} Get Remote Users Request`);
       const result = await this.exampleService.getRemoteUsers();
-      this.logger.info(`${logPrefix} Get Remote Users Response`, {
+      this.logger.debug(`${logPrefix} Get Remote Users Response`, {
         result,
       });
       return result;

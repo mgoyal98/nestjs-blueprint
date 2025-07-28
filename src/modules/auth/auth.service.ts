@@ -24,9 +24,7 @@ export class AuthService {
   async signUp(user: CreateUserDto) {
     const logPrefix = this.logPrefix(this.signUp.name);
     try {
-      this.logger.info(`${logPrefix} Sign Up Request`);
       const result = await this.userService.createUser(user);
-      this.logger.info(`${logPrefix} Sign Up Response`);
       return result;
     } catch (error) {
       this.logger.error(`${logPrefix} Sign Up Error`, { error });
@@ -37,7 +35,6 @@ export class AuthService {
   async login(user: LoginDto) {
     const logPrefix = this.logPrefix(this.login.name);
     try {
-      this.logger.info(`${logPrefix} Login Request`);
       const result = await this.userService.findUserByEmail(user.email);
 
       if (!(await comparePassword(user.password, result.password))) {
@@ -45,8 +42,6 @@ export class AuthService {
       }
 
       const tokenHeaders = await this.generateTokensAndHeaders(result);
-
-      this.logger.info(`${logPrefix} Login Response`);
 
       return {
         data: result,
@@ -61,8 +56,6 @@ export class AuthService {
   async refreshToken(headerRefreshToken: string) {
     const logPrefix = this.logPrefix(this.refreshToken.name);
     try {
-      this.logger.info(`${logPrefix} Refresh Token Request`);
-
       if (!headerRefreshToken) {
         throw exceptionMapper(EXCEPTION_MESSAGE.INVALID_REFRESH_TOKEN);
       }
@@ -84,8 +77,6 @@ export class AuthService {
       // Generate new tokens
       const tokenHeaders = await this.generateTokensAndHeaders(user);
 
-      this.logger.info(`${logPrefix} Refresh Token Response`);
-
       return {
         data: {},
         headers: tokenHeaders,
@@ -97,6 +88,12 @@ export class AuthService {
   }
 
   private async generateTokensAndHeaders(user: User) {
+    const logPrefix = this.logPrefix(this.refreshToken.name);
+
+    this.logger.debug(`${logPrefix} Generating Auth Token for User`, {
+      user,
+    });
+
     const payload = {
       iss: this.configService.get('app.name'),
       sub: user.userId,

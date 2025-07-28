@@ -19,7 +19,6 @@ export class UserService {
   async findAllUsers(): Promise<User[]> {
     const logPrefix = this.logPrefix(this.findAllUsers.name);
     try {
-      this.logger.debug(`${logPrefix} Finding all users`);
       const result = await this.userRepository.findAll();
       this.logger.debug(`${logPrefix} Found all users`, { result });
       return result;

@@ -20,9 +20,9 @@ export class UserController {
   @Get()
   async findAllUsers(): Promise<User[]> {
     const logPrefix = this.logPrefix(this.findAllUsers.name);
-    this.logger.info(`${logPrefix} Find All Users Request`);
+    this.logger.debug(`${logPrefix} Find All Users Request`);
     const result = await this.userService.findAllUsers();
-    this.logger.info(`${logPrefix} Find All Users Response`, { result });
+    this.logger.debug(`${logPrefix} Find All Users Response`, { result });
     return result;
   }
 
@@ -31,9 +31,9 @@ export class UserController {
   async getMe(): Promise<User> {
     const logPrefix = this.logPrefix(this.getMe.name);
     const userId = this.cls.get(ContextKey.USER_ID);
-    this.logger.info(`${logPrefix} Get Me Request`, { userId });
+    this.logger.debug(`${logPrefix} Get Me Request`, { userId });
     const result = await this.userService.findUserById(userId);
-    this.logger.info(`${logPrefix} Get Me Response`, { result });
+    this.logger.debug(`${logPrefix} Get Me Response`, { result });
     return result;
   }
 }

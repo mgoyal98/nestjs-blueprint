@@ -19,29 +19,29 @@ export class AuthController {
   @Post('signup')
   async signup(@Body() user: CreateUserDto) {
     const logPrefix = this.logPrefix(this.signup.name);
-    this.logger.info(`${logPrefix} Sign Up Request`);
+    this.logger.debug(`${logPrefix} Sign Up Request`);
     const result = await this.authService.signUp(user);
-    this.logger.info(`${logPrefix} Sign Up Response`);
+    this.logger.debug(`${logPrefix} Sign Up Response`);
     return result;
   }
 
   @Post('login')
   async login(@Body() user: LoginDto) {
     const logPrefix = this.logPrefix(this.login.name);
-    this.logger.info(`${logPrefix} Login Request`);
+    this.logger.debug(`${logPrefix} Login Request`);
     const result = await this.authService.login(user);
-    this.logger.info(`${logPrefix} Login Response`);
+    this.logger.debug(`${logPrefix} Login Response`);
     return result;
   }
 
   @Post('refresh-token')
   async refreshToken(@Req() req: Request) {
     const logPrefix = this.logPrefix(this.refreshToken.name);
-    this.logger.info(`${logPrefix} Refresh Token Request`);
+    this.logger.debug(`${logPrefix} Refresh Token Request`);
     const result = await this.authService.refreshToken(
       req.headers[HeaderKey.REFRESH_TOKEN],
     );
-    this.logger.info(`${logPrefix} Refresh Token Response`);
+    this.logger.debug(`${logPrefix} Refresh Token Response`);
     return result;
   }
 }
