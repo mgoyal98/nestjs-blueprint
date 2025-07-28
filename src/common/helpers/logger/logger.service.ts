@@ -50,7 +50,7 @@ export class AppLoggerService implements LoggerService {
       return data.map((item) => this.redactPiiData(item));
     }
 
-    const redactedData = { ...data };
+    const redactedData = JSON.parse(JSON.stringify(data));
     for (const key in redactedData) {
       const lowerKey = key.toLowerCase();
       if (
