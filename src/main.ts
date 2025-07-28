@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import {
+  RequestInterceptor,
   SetContextInterceptor,
   StandardResponseInterceptor,
 } from 'src/common/interceptors';
@@ -32,7 +33,8 @@ async function bootstrap() {
   app.setGlobalPrefix(appPrefix);
   app.useGlobalInterceptors(
     new SetContextInterceptor(app.get(ClsService), config),
-    new StandardResponseInterceptor(),
+    new RequestInterceptor(logger),
+    new StandardResponseInterceptor(logger),
   );
   app.useGlobalFilters(new AppExceptionFilter(config, logger));
 

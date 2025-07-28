@@ -23,7 +23,7 @@ export class AppExceptionFilter implements ExceptionFilter {
     const request = ctx.getRequest<Request>();
 
     this.logger.error(
-      `[${this.config.get('app.name')}] [Exception Filter] Caught Exception`,
+      `[Exception Filter] Caught Exception`,
       { exception },
       exception,
     );
@@ -74,10 +74,7 @@ export class AppExceptionFilter implements ExceptionFilter {
       );
     }
 
-    this.logger.error(
-      `[${this.config.get('app.name')}] [Exception Filter] Error Response`,
-      { errorResponse },
-    );
+    this.logger.error(`[Exception Filter] Error Response`, { errorResponse });
 
     response.status(errorResponse.status).json(errorResponse);
   }
