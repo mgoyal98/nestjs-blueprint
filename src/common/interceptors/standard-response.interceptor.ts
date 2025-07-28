@@ -9,6 +9,7 @@ import { map } from 'rxjs/operators';
 import { IStandardResponse } from 'src/common/interfaces';
 import { Request, Response } from 'express';
 import { AppLoggerService } from 'src/common/helpers/logger';
+import { trace, SpanStatusCode } from '@opentelemetry/api';
 
 @Injectable()
 export class StandardResponseInterceptor implements NestInterceptor {
@@ -47,6 +48,8 @@ export class StandardResponseInterceptor implements NestInterceptor {
       timestamp: Date.now(),
       path: request.path,
     };
+
+    trace.getActiveSpan()?.setStatus({ code: SpanStatusCode.OK });
 
     this.logger.info('[Response Interceptor] Response', { response: resp });
 

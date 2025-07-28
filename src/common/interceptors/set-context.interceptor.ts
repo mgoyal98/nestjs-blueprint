@@ -10,6 +10,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { ConfigService } from '@nestjs/config';
 import { ContextKey, HeaderKey } from 'src/common/enums';
 
+import { trace } from '@opentelemetry/api';
+
 @Injectable()
 export class SetContextInterceptor implements NestInterceptor {
   constructor(
@@ -21,12 +23,15 @@ export class SetContextInterceptor implements NestInterceptor {
     const request = context.switchToHttp().getRequest();
     const headers = request.headers;
 
+    const span = trace.getActiveSpan();
+
     const appName = this.configService.get('app.name');
 
     let correlationId = headers[HeaderKey.CORRELATION_ID];
     if (!correlationId) {
       correlationId = `${appName}-${uuidv4()}`;
     }
+    span?.setAttribute('request.correlationId', correlationId);
 
     const userId = headers[HeaderKey.USER_ID];
 
@@ -34,6 +39,8 @@ export class SetContextInterceptor implements NestInterceptor {
     if (userId) {
       this.cls.set(ContextKey.USER_ID, userId);
     }
+    span?.setAttribute('user.id', userId);
+
     return next.handle();
   }
 }

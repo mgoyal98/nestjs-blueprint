@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import * as chalk from 'chalk';
 import { ClsService } from 'nestjs-cls';
 import * as winston from 'winston';
+import { trace } from '@opentelemetry/api';
 
 @Injectable()
 export class AppLoggerService implements LoggerService {
@@ -70,6 +71,7 @@ export class AppLoggerService implements LoggerService {
   }
 
   private getLogAdditionalData = winston.format((info) => {
+    const span = trace.getActiveSpan();
     return {
       ...info,
       application: this.config.get('app.name'),
@@ -78,8 +80,8 @@ export class AppLoggerService implements LoggerService {
       correlationId:
         this.cls.get<string>(ContextKey.CORRELATION_ID) ||
         `${this.config.get('app.name')}-${uuidv4()}`,
-      traceId: '',
-      spanId: '',
+      traceId: span?.spanContext()?.traceId || '',
+      spanId: span?.spanContext()?.spanId || '',
     };
   });
 

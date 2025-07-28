@@ -10,6 +10,8 @@ import { isArray, isEmpty } from 'lodash';
 import { IStandardResponse } from 'src/common/interfaces';
 import { ConfigService } from '@nestjs/config';
 import { HeaderKey } from 'src/common/enums';
+import { trace, SpanStatusCode } from '@opentelemetry/api';
+
 @Catch()
 export class AppExceptionFilter implements ExceptionFilter {
   constructor(
@@ -27,6 +29,11 @@ export class AppExceptionFilter implements ExceptionFilter {
       { exception },
       exception,
     );
+
+    const span = trace.getActiveSpan();
+    if (span) {
+      span.recordException(exception);
+    }
 
     const errorResponse: IStandardResponse = {
       success: false,
@@ -73,6 +80,16 @@ export class AppExceptionFilter implements ExceptionFilter {
         exception?.response?.xAppException,
       );
     }
+
+    span
+      ?.setStatus({
+        code: SpanStatusCode.ERROR,
+        message: errorResponse?.message,
+      })
+      ?.setAttribute('appException', errorResponse?.message)
+      ?.recordException(
+        errorResponse?.data?.errorCode || errorResponse?.message,
+      );
 
     this.logger.error(`[Exception Filter] Error Response`, { errorResponse });
 

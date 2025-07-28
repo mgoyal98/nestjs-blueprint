@@ -71,6 +71,40 @@ $ mau deploy
 
 With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
 
+## OpenTelemetry Integration
+
+This project includes OpenTelemetry integration for distributed tracing and monitoring. The telemetry data is exported using OTLP HTTP protocol.
+
+### Configuration
+
+OpenTelemetry can be configured using the following environment variables:
+
+```env
+OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318/v1/traces  # Your OpenTelemetry collector endpoint
+```
+
+### Features
+
+- Automatic instrumentation for HTTP requests and responses
+- NestJS-specific instrumentation
+- Database operations tracing
+- Custom service name and version tracking
+
+### Visualization
+
+To visualize the traces, you'll need to set up an OpenTelemetry Collector and a visualization tool like Jaeger or Zipkin. Here's a quick setup using Docker:
+
+```bash
+# Run Jaeger all-in-one container
+docker run -d --name jaeger \
+  -e COLLECTOR_OTLP_ENABLED=true \
+  -p 16686:16686 \
+  -p 4318:4318 \
+  jaegertracing/all-in-one:latest
+```
+
+Then access the Jaeger UI at http://localhost:16686
+
 ## Resources
 
 Check out a few resources that may come in handy when working with NestJS:
