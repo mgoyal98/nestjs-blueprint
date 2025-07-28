@@ -9,11 +9,17 @@ import * as winston from 'winston';
 @Injectable()
 export class AppLoggerService implements LoggerService {
   private winstonLogger: winston.Logger;
+  private piiConfig: {
+    enabled: boolean;
+    keys: string[];
+    mask: string;
+  };
 
   constructor(
     private config: ConfigService,
     private cls: ClsService,
   ) {
+    this.piiConfig = this.config.get('logger.pii');
     let transportOptions = {};
     if (this.config.get<boolean>('logger.colorify')) {
       transportOptions = {
@@ -29,6 +35,38 @@ export class AppLoggerService implements LoggerService {
       ),
       transports: [new winston.transports.Console(transportOptions)],
     });
+  }
+
+  private redactPiiData(data: any): any {
+    if (!this.piiConfig?.enabled) {
+      return data;
+    }
+
+    if (typeof data !== 'object' || data === null) {
+      return data;
+    }
+
+    if (Array.isArray(data)) {
+      return data.map((item) => this.redactPiiData(item));
+    }
+
+    const redactedData = { ...data };
+    for (const key in redactedData) {
+      const lowerKey = key.toLowerCase();
+      if (
+        this.piiConfig.keys.some((piiKey) =>
+          lowerKey.includes(piiKey.toLowerCase()),
+        )
+      ) {
+        redactedData[key] = this.piiConfig.mask;
+      } else if (
+        typeof redactedData[key] === 'object' &&
+        redactedData[key] !== null
+      ) {
+        redactedData[key] = this.redactPiiData(redactedData[key]);
+      }
+    }
+    return redactedData;
   }
 
   private getLogAdditionalData = winston.format((info) => {
@@ -74,16 +112,27 @@ export class AppLoggerService implements LoggerService {
         paramCount++;
       }
     }
-    return parsedData;
+    return this.redactPiiData(parsedData);
   }
 
   private handleLog(level: string, message: string, ...data: any) {
     const parsedData = this.parseData(...data);
 
-    if (this.config.get<boolean>('logger.delimitter')) {
-      console.log('----------------------------------------');
-    }
+    this.handleDelimitter(level);
     this.winstonLogger.log(this.getWinstonLogLevel(level), message, parsedData);
+  }
+
+  private handleDelimitter(level: string) {
+    if (!this.config.get<boolean>('logger.delimitter')) {
+      return;
+    }
+    if (
+      !this.config.get<boolean>('logger.debug') &&
+      ['debug', 'log'].includes(level)
+    ) {
+      return;
+    }
+    console.log('----------------------------------------');
   }
 
   private getWinstonLogLevel(level: string) {

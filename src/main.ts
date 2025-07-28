@@ -11,6 +11,7 @@ import { formatErrorText } from 'src/common/utils';
 import helmet from 'helmet';
 import { AppExceptionFilter } from 'src/common/filters';
 import { ValidationPipe } from '@nestjs/common';
+import mongoose from 'mongoose';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -44,6 +45,14 @@ async function bootstrap() {
   process.on('uncaughtException', (err: any) => {
     const errorText: string = formatErrorText(appName, err);
     logger.error(errorText, err);
+  });
+
+  mongoose.set('debug', function (collection, method, query, doc, options) {
+    logger.debug(`[MongoDB] ${collection}.${method}`, {
+      query,
+      doc,
+      options,
+    });
   });
 
   await app.listen(appPort);

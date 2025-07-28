@@ -14,6 +14,23 @@ export const config = {
     delimitter: false,
     colorify: false,
     debug: false,
+    pii: {
+      enabled: true,
+      // List of keys that should be redacted from logs
+      keys: process.env.PII_KEYS
+        ? process.env.PII_KEYS.split(',')
+        : [
+            'password',
+            'token',
+            'secret',
+            'authorization',
+            'email',
+            'phone',
+            'address',
+          ],
+      // The text to replace PII values with
+      mask: '***REDACTED***',
+    },
   },
   database: {
     mongoDbUrl:
