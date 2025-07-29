@@ -1,133 +1,90 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# NestJS-Blueprint
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+NestJS-Blueprint is a scalable starter template for building robust NestJS applications. It comes with batteries-included integrations for AWS, databases, observability, security, and more—empowering you to quickly launch production-grade APIs and real-time systems with best practices.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Features
 
-## Description
+- **Modular Architecture**: Organize your code with clear separation of concerns using modules for users, authentication, examples, and more.
+- **Database Integration**: 
+  - Built-in MongoDB support via Mongoose, with async configuration and robust connection event logging.
+- **Authentication & Security**:
+  - JWT-based authentication guard.
+  - API key guard for securing endpoints.
+  - Centralized exception handling and validation.
+  - CORS and Helmet for secure HTTP headers.
+- **AWS Integration**:
+  - AWS S3 integration with utilities for file upload, download, deletion, listing, and presigned URLs.
+  - Flexible credential management (env or IAM role).
+- **Observability & Logging**:
+  - OpenTelemetry tracing and metrics (OTLP exporter ready).
+  - Context-aware, structured logging with Winston.
+  - PII masking for sensitive fields in logs.
+  - Correlation IDs and user context propagation.
+- **HTTP Connector**:
+  - Centralized, configurable HTTP client for outbound API calls with logging and error handling.
+- **API Response Standardization**:
+  - Global response interceptor for consistent API responses.
+  - Global exception filter for uniform error handling.
+- **Configuration Management**:
+  - Environment-based config files (default, development, production, test).
+  - Centralized config loading with `@nestjs/config`.
+- **Developer Experience**:
+  - Ready-to-use example modules and DTOs.
+  - Built-in validation and error messages.
+  - Modular, extensible codebase for rapid feature development.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Getting Started
 
-## Project setup
+### Prerequisites
 
-```bash
-$ npm install
-```
+- Node.js (v16+ recommended)
+- MongoDB (local or remote)
+- AWS account (for S3 integration, optional)
 
-## Compile and run the project
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Run tests
+### Installation
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+git clone https://github.com/your-org/nestjs-blueprint.git
+cd nestjs-blueprint
+npm install
 ```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## OpenTelemetry Integration
-
-This project includes OpenTelemetry integration for distributed tracing and monitoring. The telemetry data is exported using OTLP HTTP protocol.
 
 ### Configuration
 
-OpenTelemetry can be configured using the following environment variables:
-
-```env
-OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318/v1/traces  # Your OpenTelemetry collector endpoint
-```
-
-### Features
-
-- Automatic instrumentation for HTTP requests and responses
-- NestJS-specific instrumentation
-- Database operations tracing
-- Custom service name and version tracking
-
-### Visualization
-
-To visualize the traces, you'll need to set up an OpenTelemetry Collector and a visualization tool like Jaeger or Zipkin. Here's a quick setup using Docker:
+Copy `.env.example` to `.env` and update values as needed:
 
 ```bash
-# Run Jaeger all-in-one container
-docker run -d --name jaeger \
-  -e COLLECTOR_OTLP_ENABLED=true \
-  -p 16686:16686 \
-  -p 4318:4318 \
-  jaegertracing/all-in-one:latest
+cp .env.example .env
 ```
 
-Then access the Jaeger UI at http://localhost:16686
+Set up your MongoDB URI, JWT secrets, AWS credentials, etc.
 
-## Resources
+### Running the App
 
-Check out a few resources that may come in handy when working with NestJS:
+```bash
+npm run start:dev
+```
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+The app will start on the port configured in your `.env` or `src/config/default.ts`.
 
-## Support
+## Project Structure
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- `src/app.module.ts` – Main application module, imports all features.
+- `src/common/` – Shared utilities, guards, interceptors, filters, helpers.
+- `src/modules/` – Feature modules (auth, user, example).
+- `src/config/` – Environment-specific configuration.
+- `src/tracer.ts` – OpenTelemetry tracing setup.
 
-## Stay in touch
+## Extending the Blueprint
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- Add new modules under `src/modules/`.
+- Register new providers or services in the relevant module.
+- Use the provided logger and HTTP connector for consistency.
+
+## Contributing
+
+Contributions are welcome! Please open issues or pull requests.
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+MIT
