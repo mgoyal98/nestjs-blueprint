@@ -54,6 +54,41 @@ export class ExampleController {
     }
   }
 
+  @Get('remote-manual')
+  async getRemoteUsersWithManualCache() {
+    const logPrefix = this.logPrefix(this.getRemoteUsersWithManualCache.name);
+    try {
+      this.logger.debug(`${logPrefix} Get Remote Users Manual Cache Request`);
+      const result = await this.exampleService.getRemoteUsersWithManualCache();
+      this.logger.debug(`${logPrefix} Get Remote Users Manual Cache Response`, {
+        result,
+      });
+      return result;
+    } catch (error) {
+      this.logger.error(
+        `${logPrefix} Get Remote Users Manual Cache Failed`,
+        error,
+      );
+      throw error;
+    }
+  }
+
+  @Get('user/:id')
+  async getCachedUserById(@Param('id') id: string) {
+    const logPrefix = this.logPrefix(this.getCachedUserById.name);
+    try {
+      this.logger.debug(`${logPrefix} Get Cached User Request`, { id });
+      const result = await this.exampleService.getCachedUserById(parseInt(id));
+      this.logger.debug(`${logPrefix} Get Cached User Response`, {
+        result,
+      });
+      return result;
+    } catch (error) {
+      this.logger.error(`${logPrefix} Get Cached User Failed`, error);
+      throw error;
+    }
+  }
+
   @Get('api-key')
   @UseGuards(ApiKeyGuard)
   getApiKey() {

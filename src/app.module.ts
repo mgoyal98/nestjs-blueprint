@@ -12,6 +12,7 @@ import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { AwsModule } from './common/helpers/aws';
+import { CacheModule } from './common/helpers/cache';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { AwsModule } from './common/helpers/aws';
     HttpConnectorModule,
     DatabaseModule,
     AwsModule,
+    CacheModule,
     ExampleModule,
     UserModule,
     AuthModule,

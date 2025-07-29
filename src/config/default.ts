@@ -66,4 +66,20 @@ export const config = {
       defaultBucket: process.env.AWS_S3_BUCKET,
     },
   },
+  cache: {
+    // Whether cache is enabled
+    isEnabled: process.env.CACHE_ENABLED === 'true' || false,
+    // Default TTL for cache entries (in seconds)
+    defaultTTL: +process.env.CACHE_DEFAULT_TTL || 3600,
+    // Default prefix for cache keys
+    prefix: process.env.CACHE_PREFIX || 'nestjs:',
+    // Redis configuration
+    redis: {
+      host: process.env.REDIS_HOST || 'localhost',
+      port: +process.env.REDIS_PORT || 6379,
+      password: process.env.REDIS_PASSWORD,
+      db: +process.env.REDIS_DB || 0,
+      keyPrefix: process.env.REDIS_KEY_PREFIX || 'nestjs:',
+    },
+  },
 };
