@@ -55,4 +55,15 @@ export const config = {
       refreshTokenExpiry: process.env.JWT_REFRESH_EXPIRES_IN || '7d',
     },
   },
+  aws: {
+    // AWS Region to use, defaults to ap-south-1 if not provided
+    region: process.env.AWS_REGION || 'ap-south-1',
+    // Optional AWS credentials - if not provided, will use IAM role
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    // Default S3 bucket configuration
+    s3: {
+      defaultBucket: process.env.AWS_S3_BUCKET,
+    },
+  },
 };
