@@ -4,4 +4,9 @@ export const config = {
     colorify: true,
     debug: true,
   },
+  e2ee: {
+    enabled: true,
+    domains: ['localhost'],
+    enforced: false,
+  },
 };

@@ -80,8 +80,8 @@ export class AppLoggerService implements LoggerService {
       correlationId:
         this.cls.get<string>(ContextKey.CORRELATION_ID) ||
         `${this.config.get('app.name')}-${uuidv4()}`,
-      traceId: span?.spanContext()?.traceId || '',
-      spanId: span?.spanContext()?.spanId || '',
+      trace_id: span?.spanContext()?.traceId || '',
+      span_id: span?.spanContext()?.spanId || '',
     };
   });
 

@@ -82,4 +82,9 @@ export const config = {
       keyPrefix: process.env.REDIS_KEY_PREFIX || 'nestjs:',
     },
   },
+  e2ee: {
+    enabled: process.env.E2EE_ENABLED === 'true' || false,
+    domains: ['localhost'],
+    keys: {},
+  },
 };

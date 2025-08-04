@@ -14,6 +14,9 @@ import helmet from 'helmet';
 import { AppExceptionFilter } from 'src/common/filters';
 import { ValidationPipe } from '@nestjs/common';
 import mongoose from 'mongoose';
+import { generateMultipleKeyPairs } from 'e2ee-adapter';
+import * as bodyParser from 'body-parser';
+import { E2EEInterceptor } from 'e2ee-adapter';
 
 async function bootstrap() {
   tracer.start();
@@ -34,6 +37,29 @@ async function bootstrap() {
   app.useLogger(logger);
 
   app.setGlobalPrefix(appPrefix);
+
+  if (config.get<boolean>('e2ee.enabled')) {
+    app.use(bodyParser.text({ type: 'text/plain' }));
+    const serverKeys = await generateMultipleKeyPairs(
+      config.get<string[]>('e2ee.domains'),
+      2048,
+    );
+    config.set('e2ee.keys', serverKeys);
+    app.useGlobalInterceptors(
+      new E2EEInterceptor({
+        config: {
+          keys: serverKeys,
+          enableRequestDecryption: true,
+          enableResponseEncryption: true,
+          excludePaths: ['/api/health', '/api/keys'],
+          excludeMethods: ['HEAD', 'OPTIONS'],
+          allowEmptyRequestBody: true,
+          enforced: config.get<boolean>('e2ee.enforced'),
+        },
+      }),
+    );
+  }
+
   app.useGlobalInterceptors(
     new SetContextInterceptor(app.get(ClsService), config),
     new RequestInterceptor(logger),
