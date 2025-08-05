@@ -50,7 +50,7 @@ NestJS-Blueprint is a scalable starter template for building robust NestJS appli
 ### Installation
 
 ```bash
-git clone https://github.com/your-org/nestjs-blueprint.git
+git clone https://github.com/mgoyal98/nestjs-blueprint.git
 cd nestjs-blueprint
 npm install
 ```
