@@ -69,7 +69,10 @@ export class AppExceptionFilter implements ExceptionFilter {
         errorResponse.message,
         errorResponse.error.details,
       );
-      errorResponse.error.code = this.getErrorCode(exception.response);
+      errorResponse.error.code = this.getErrorCode(
+        exception.response,
+        errorResponse.status,
+      );
       delete exception.response.data?.errorCode;
     }
 
@@ -108,11 +111,53 @@ export class AppExceptionFilter implements ExceptionFilter {
     return status;
   }
 
-  private getErrorCode(response: any) {
+  private getErrorCode(response: any, statusCode: number) {
     if (response?.data?.errorCode) {
       return response?.data?.errorCode;
     }
-    return 'INTERNAL_SERVER_EXCEPTION';
+
+    // Map HTTP status codes to error codes
+    const statusCodeToErrorCode: { [key: number]: string } = {
+      400: 'BAD_REQUEST_EXCEPTION',
+      401: 'UNAUTHORIZED_EXCEPTION',
+      403: 'FORBIDDEN_EXCEPTION',
+      404: 'NOT_FOUND_EXCEPTION',
+      405: 'METHOD_NOT_ALLOWED_EXCEPTION',
+      406: 'NOT_ACCEPTABLE_EXCEPTION',
+      409: 'CONFLICT_EXCEPTION',
+      410: 'GONE_EXCEPTION',
+      411: 'LENGTH_REQUIRED_EXCEPTION',
+      412: 'PRECONDITION_FAILED_EXCEPTION',
+      413: 'PAYLOAD_TOO_LARGE_EXCEPTION',
+      414: 'URI_TOO_LONG_EXCEPTION',
+      415: 'UNSUPPORTED_MEDIA_TYPE_EXCEPTION',
+      416: 'RANGE_NOT_SATISFIABLE_EXCEPTION',
+      417: 'EXPECTATION_FAILED_EXCEPTION',
+      418: 'I_AM_A_TEAPOT_EXCEPTION',
+      421: 'MISDIRECTED_EXCEPTION',
+      422: 'UNPROCESSABLE_ENTITY_EXCEPTION',
+      423: 'LOCKED_EXCEPTION',
+      424: 'FAILED_DEPENDENCY_EXCEPTION',
+      425: 'TOO_EARLY_EXCEPTION',
+      426: 'UPGRADE_REQUIRED_EXCEPTION',
+      428: 'PRECONDITION_REQUIRED_EXCEPTION',
+      429: 'TOO_MANY_REQUESTS_EXCEPTION',
+      431: 'REQUEST_HEADER_FIELDS_TOO_LARGE_EXCEPTION',
+      451: 'UNAVAILABLE_FOR_LEGAL_REASONS_EXCEPTION',
+      500: 'INTERNAL_SERVER_EXCEPTION',
+      501: 'NOT_IMPLEMENTED_EXCEPTION',
+      502: 'BAD_GATEWAY_EXCEPTION',
+      503: 'SERVICE_UNAVAILABLE_EXCEPTION',
+      504: 'GATEWAY_TIMEOUT_EXCEPTION',
+      505: 'HTTP_VERSION_NOT_SUPPORTED_EXCEPTION',
+      506: 'VARIANT_ALSO_NEGOTIATES_EXCEPTION',
+      507: 'INSUFFICIENT_STORAGE_EXCEPTION',
+      508: 'LOOP_DETECTED_EXCEPTION',
+      510: 'NOT_EXTENDED_EXCEPTION',
+      511: 'NETWORK_AUTHENTICATION_REQUIRED_EXCEPTION',
+    };
+
+    return statusCodeToErrorCode[statusCode] || 'INTERNAL_SERVER_EXCEPTION';
   }
 
   private getMessage(
